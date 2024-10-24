@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un étudiant</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto mt-10">
+        <h1 class="text-4xl font-bold text-center mb-8">Ajouter un étudiant</h1>
+
+        <!-- Afficher un message d'erreur s'il existe -->
+        {% if error_message %}
+        <div class="bg-red-100 text-red-700 p-4 mb-4 rounded">
+            {{ error_message }}
+        </div>
+        {% endif %}
+
+        <form method="POST" class="bg-white p-8 rounded shadow-md w-1/2 mx-auto">
+            <div class="mb-4">
+                <label for="nom" class="block text-gray-700">Nom :</label>
+                <input type="text" id="nom" name="nom" required class="w-full border border-gray-300 p-2 rounded">
+            </div>
+            <div class="mb-4">
+                <label for="age" class="block text-gray-700">Âge :</label>
+                <input type="number" id="age" name="age" required class="w-full border border-gray-300 p-2 rounded">
+            </div>
+            <div class="mb-4">
+                <label for="identifiant" class="block text-gray-700">Identifiant :</label>
+                <input type="text" id="identifiant" name="identifiant" required class="w-full border border-gray-300 p-2 rounded">
+            </div>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Ajouter</button>
+        </form>
+        <div class="text-center mt-8">
+            <a href="{{ url_for('afficher_etudiants') }}" class="text-blue-500 hover:underline">Retour à la liste des étudiants</a>
+        </div>
+    </div>
+</body>
+</html>
