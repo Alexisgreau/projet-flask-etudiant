@@ -1,10 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 
-#Contrôle sur les ID/ clef unique
-#Arrondie des moyennes
-#Confirmation des supression
-#Contôle sur les caractères pour la saisies des id ou nom 
-#N'afficher que 10 étudiants par page / Rajouter la recherche selon 
+#Contrôle sur les caractères pour la saisies des id ou nom
+#N'afficher que 10 étudiants par page / Rajouter la recherche selon
 
 app = Flask(__name__)
 
@@ -25,7 +22,7 @@ class Etudiant:
     def calculer_moyenne(self):
         if len(self.notes) == 0:
             return 0
-        return sum(self.notes) / len(self.notes)
+        return round(sum(self.notes) / len(self.notes), 2)
 
 # Fonction pour vérifier si l'identifiant est unique
 def est_identifiant_unique(identifiant):
