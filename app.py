@@ -27,6 +27,24 @@ class Etudiant:
             return 0
         return round(sum(self.notes) / len(self.notes),2)
 
+# etudiants = [
+#     Etudiant("Alice Dupont", 20, 101),
+#     Etudiant("Bruno Marchand", 22, 102),
+#     Etudiant("Claire Lefevre", 21, 103),
+#     Etudiant("David Bernard", 23, 104),
+#     Etudiant("Emma Garnier", 20, 105),
+#     Etudiant("François Petit", 24, 106),
+#     Etudiant("Gabrielle Martin", 22, 107),
+#     Etudiant("Hugo Leroy", 21, 108),
+#     Etudiant("Isabelle Moreau", 23, 109),
+#     Etudiant("Jacques Moulin", 25, 110),
+#     Etudiant("Karine Dupuis", 20, 111),
+#     Etudiant("Louis Rousseau", 22, 112),
+#     Etudiant("Marie Dubois", 21, 113),
+#     Etudiant("Nicolas Girard", 23, 114),
+#     Etudiant("Olivier Fontaine", 24, 115)
+# ]
+
 # Fonction pour vérifier si l'identifiant est unique
 def est_identifiant_unique(identifiant):
     for etudiant in etudiants:
@@ -58,7 +76,7 @@ def ajouter_etudiant():
     if request.method == 'POST':
         nom = request.form['nom']
         age = int(request.form['age'])
-        identifiant = request.form['identifiant']
+        identifiant = request.form['identifiant']  # Identifiant saisi par l'utilisateur
 
         # Vérification de l'unicité de l'identifiant
         if est_identifiant_unique(identifiant):
@@ -67,7 +85,7 @@ def ajouter_etudiant():
             return redirect(url_for('afficher_etudiants'))
         else:
             # Définir un message d'erreur si l'identifiant existe déjà
-            error_message = "Erreur : L'identifiant existe déjà !"
+            error_message = "Erreur : L'identifiant existe déjà ! Veuillez en choisir un autre."
 
     return render_template('ajouter_etudiant.html', error_message=error_message)
 

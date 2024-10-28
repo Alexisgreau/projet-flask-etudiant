@@ -10,12 +10,18 @@
     <div class="container mx-auto mt-10">
         <h1 class="text-4xl font-bold text-center mb-8">Liste des étudiants</h1>
 
+        <!-- Champ de recherche -->
+        <div class="mb-6">
+            <input type="text" id="search-bar" onkeyup="searchStudents()" placeholder="Rechercher un étudiant par nom, âge ou identifiant" 
+                   class="w-full border border-gray-300 p-2 rounded" />
+        </div>
+
         <!-- Affichage des étudiants avec boutons Détails et Supprimer -->
-        <ul class="list-disc">
+        <ul id="student-list" class="list-disc">
             {% for etudiant in etudiants %}
-            <li class="mb-4">
+            <li class="mb-4 student-item" data-name="{{ etudiant.nom }}" data-age="{{ etudiant.age }}" data-id="{{ etudiant.identifiant }}">
                 <div class="flex justify-between items-center bg-white p-4 rounded shadow">
-                    <span>{{ etudiant.nom }} ({{ etudiant.age }} ans)</span>
+                    <span>{{ etudiant.nom }} ({{ etudiant.age }} ans) - ID : {{ etudiant.identifiant }}</span>
                     <div>
                         <!-- Bouton pour afficher les détails de l'étudiant -->
                         <a href="{{ url_for('afficher_etudiant', id=loop.index0) }}" class="text-blue-500 hover:underline">Détails</a> |
@@ -51,9 +57,23 @@
     </div>
 
     <script>
-        // Fonction pour confirmer la suppression d'un étudiant
-        function confirmDelete() {
-            return confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?');
+        // Fonction de recherche en temps réel
+        function searchStudents() {
+            const searchInput = document.getElementById("search-bar").value.toLowerCase();
+            const studentItems = document.querySelectorAll(".student-item");
+
+            studentItems.forEach(item => {
+                const name = item.getAttribute("data-name").toLowerCase();
+                const age = item.getAttribute("data-age");
+                const id = item.getAttribute("data-id").toLowerCase();
+
+                // Affiche ou masque l'élément en fonction de la recherche
+                if (name.includes(searchInput) || age.includes(searchInput) || id.includes(searchInput)) {
+                    item.style.display = "list-item";
+                } else {
+                    item.style.display = "none";
+                }
+            });
         }
     </script>
 </body>
