@@ -25,7 +25,7 @@ class Etudiant:
     def calculer_moyenne(self):
         if len(self.notes) == 0:
             return 0
-        return sum(self.notes) / len(self.notes)
+        return round(sum(self.notes) / len(self.notes),2)
 
 # Fonction pour vérifier si l'identifiant est unique
 def est_identifiant_unique(identifiant):

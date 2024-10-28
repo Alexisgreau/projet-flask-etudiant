@@ -10,12 +10,20 @@
     <div class="container mx-auto mt-10">
         <h1 class="text-4xl font-bold text-center mb-8">Liste des étudiants</h1>
 
-        <!-- Affichage des étudiants -->
+        <!-- Affichage des étudiants avec boutons Détails et Supprimer -->
         <ul class="list-disc">
             {% for etudiant in etudiants %}
             <li class="mb-4">
                 <div class="flex justify-between items-center bg-white p-4 rounded shadow">
                     <span>{{ etudiant.nom }} ({{ etudiant.age }} ans)</span>
+                    <div>
+                        <!-- Bouton pour afficher les détails de l'étudiant -->
+                        <a href="{{ url_for('afficher_etudiant', id=loop.index0) }}" class="text-blue-500 hover:underline">Détails</a> |
+                        <!-- Bouton pour supprimer l'étudiant avec confirmation -->
+                        <form action="{{ url_for('supprimer_etudiant', id=loop.index0) }}" method="get" style="display:inline;">
+                            <button type="submit" class="text-red-500 hover:underline" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?')">Supprimer</button>
+                        </form>
+                    </div>
                 </div>
             </li>
             {% endfor %}
@@ -41,5 +49,12 @@
             <a href="{{ url_for('ajouter_etudiant') }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Ajouter un étudiant</a>
         </div>
     </div>
+
+    <script>
+        // Fonction pour confirmer la suppression d'un étudiant
+        function confirmDelete() {
+            return confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?');
+        }
+    </script>
 </body>
 </html>
