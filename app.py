@@ -37,7 +37,19 @@ def est_identifiant_unique(identifiant):
 # Route principale pour afficher la liste des étudiants
 @app.route('/')
 def afficher_etudiants():
-    return render_template('index.html', etudiants=etudiants)
+    # Récupère le numéro de page depuis l'URL (défaut : 1)
+    page = request.args.get('page', 1, type=int)
+    per_page = 10  # Nombre d'étudiants par page
+
+    # Calcul des indices pour récupérer les étudiants de la page actuelle
+    start = (page - 1) * per_page
+    end = start + per_page
+    etudiants_affiches = etudiants[start:end]
+
+    # Calcul du nombre total de pages
+    total_pages = (len(etudiants) + per_page - 1) // per_page
+
+    return render_template('index.html', etudiants=etudiants_affiches, page=page, total_pages=total_pages)
 
 # Route pour ajouter un étudiant
 @app.route('/ajouter', methods=['GET', 'POST'])
