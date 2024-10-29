@@ -1,90 +1,58 @@
 from flask import Flask, render_template, request, redirect, url_for
-
-#Contrôle sur les ID/ clef unique
-#Arrondie des moyennes
-#Confirmation des supression
-#Contôle sur les caractères pour la saisies des id ou nom 
-#N'afficher que 10 étudiants par page / Rajouter la recherche selon 
+import pandas as pd
+import numpy as np
 
 app = Flask(__name__)
 
-# Liste pour stocker les étudiants
-etudiants = []
+# Initialisation du DataFrame pour stocker les étudiants
+etudiants_df = pd.DataFrame(columns=["nom", "age", "identifiant", "notes"])
 
-# Classe Etudiant
-class Etudiant:
-    def __init__(self, nom, age, identifiant):
-        self.nom = nom
-        self.age = age
-        self.identifiant = identifiant
-        self.notes = []
-
-    def ajouter_note(self, note):
-        self.notes.append(note)
-
-    def calculer_moyenne(self):
-        if len(self.notes) == 0:
-            return 0
-        return round(sum(self.notes) / len(self.notes),2)
-
-# etudiants = [
-#     Etudiant("Alice Dupont", 20, 101),
-#     Etudiant("Bruno Marchand", 22, 102),
-#     Etudiant("Claire Lefevre", 21, 103),
-#     Etudiant("David Bernard", 23, 104),
-#     Etudiant("Emma Garnier", 20, 105),
-#     Etudiant("François Petit", 24, 106),
-#     Etudiant("Gabrielle Martin", 22, 107),
-#     Etudiant("Hugo Leroy", 21, 108),
-#     Etudiant("Isabelle Moreau", 23, 109),
-#     Etudiant("Jacques Moulin", 25, 110),
-#     Etudiant("Karine Dupuis", 20, 111),
-#     Etudiant("Louis Rousseau", 22, 112),
-#     Etudiant("Marie Dubois", 21, 113),
-#     Etudiant("Nicolas Girard", 23, 114),
-#     Etudiant("Olivier Fontaine", 24, 115)
-# ]
+# Fonction pour ajouter un étudiant dans le DataFrame
+def ajouter_etudiant(nom, age, identifiant):
+    global etudiants_df
+    new_student = pd.DataFrame({
+        "nom": [nom],
+        "age": [age],
+        "identifiant": [identifiant],
+        "notes": [[]]
+    })
+    etudiants_df = pd.concat([etudiants_df, new_student], ignore_index=True)
 
 # Fonction pour vérifier si l'identifiant est unique
 def est_identifiant_unique(identifiant):
-    for etudiant in etudiants:
-        if etudiant.identifiant == identifiant:
-            return False
-    return True
+    return identifiant not in etudiants_df["identifiant"].values
+
+# Fonction pour calculer la moyenne des notes d'un étudiant
+def calculer_moyenne(notes):
+    if len(notes) == 0:
+        return 0
+    return round(np.mean(notes), 2)
 
 # Route principale pour afficher la liste des étudiants
 @app.route('/')
 def afficher_etudiants():
-    # Récupère le numéro de page depuis l'URL (défaut : 1)
     page = request.args.get('page', 1, type=int)
-    per_page = 10  # Nombre d'étudiants par page
-
-    # Calcul des indices pour récupérer les étudiants de la page actuelle
+    per_page = 10
     start = (page - 1) * per_page
     end = start + per_page
-    etudiants_affiches = etudiants[start:end]
-
-    # Calcul du nombre total de pages
-    total_pages = (len(etudiants) + per_page - 1) // per_page
+    etudiants_affiches = etudiants_df.iloc[start:end].to_dict(orient="records")
+    total_pages = (len(etudiants_df) + per_page - 1) // per_page
 
     return render_template('index.html', etudiants=etudiants_affiches, page=page, total_pages=total_pages)
 
 # Route pour ajouter un étudiant
 @app.route('/ajouter', methods=['GET', 'POST'])
-def ajouter_etudiant():
+def ajouter_etudiant_route():
     error_message = None
     if request.method == 'POST':
         nom = request.form['nom']
         age = int(request.form['age'])
-        identifiant = request.form['identifiant']  # Identifiant saisi par l'utilisateur
+        identifiant = request.form['identifiant']
 
-        # Vérification de l'unicité de l'identifiant
         if est_identifiant_unique(identifiant):
-            nouvel_etudiant = Etudiant(nom, age, identifiant)
-            etudiants.append(nouvel_etudiant)
+            ajouter_etudiant(nom, age, identifiant)
             return redirect(url_for('afficher_etudiants'))
         else:
-            # Définir un message d'erreur si l'identifiant existe déjà
             error_message = "Erreur : L'identifiant existe déjà ! Veuillez en choisir un autre."
 
     return render_template('ajouter_etudiant.html', error_message=error_message)
@@ -92,37 +60,39 @@ def ajouter_etudiant():
 # Route pour afficher les détails d'un étudiant et lui ajouter une note
 @app.route('/etudiant/<int:id>', methods=['GET', 'POST'])
 def afficher_etudiant(id):
-    etudiant = etudiants[id]
+    etudiant = etudiants_df.iloc[id]
     if request.method == 'POST':
         note = float(request.form['note'])
-        etudiant.ajouter_note(note)
+        etudiants_df.at[id, 'notes'].append(note)
         return redirect(url_for('afficher_etudiant', id=id))
-    moyenne = etudiant.calculer_moyenne()
+
+    moyenne = calculer_moyenne(etudiant['notes'])
     return render_template('details_etudiant.html', etudiant=etudiant, moyenne=moyenne, id=id)
 
 # Route pour supprimer un étudiant
 @app.route('/supprimer/<int:id>')
 def supprimer_etudiant(id):
-    del etudiants[id]
+    global etudiants_df
+    etudiants_df = etudiants_df.drop(id).reset_index(drop=True)
     return redirect(url_for('afficher_etudiants'))
 
 # Route pour supprimer une note spécifique d'un étudiant
 @app.route('/supprimer_note/<int:id>/<int:index>')
 def supprimer_note(id, index):
-    etudiant = etudiants[id]
-    if 0 <= index < len(etudiant.notes):
-        del etudiant.notes[index]
+    notes = etudiants_df.at[id, 'notes']
+    if 0 <= index < len(notes):
+        notes.pop(index)
     return redirect(url_for('afficher_etudiant', id=id))
 
 # Route pour modifier les informations d'un étudiant
 @app.route('/modifier/<int:id>', methods=['GET', 'POST'])
 def modifier_etudiant(id):
-    etudiant = etudiants[id]
     if request.method == 'POST':
-        # Récupérer les nouvelles valeurs depuis le formulaire
-        etudiant.nom = request.form['nom']
-        etudiant.age = int(request.form['age'])
+        etudiants_df.at[id, 'nom'] = request.form['nom']
+        etudiants_df.at[id, 'age'] = int(request.form['age'])
         return redirect(url_for('afficher_etudiant', id=id))
+
+    etudiant = etudiants_df.iloc[id]
     return render_template('modifier_etudiant.html', etudiant=etudiant, id=id)
 
 if __name__ == '__main__':
