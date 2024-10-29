@@ -3,31 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion Des Etudiants</title>
+    <title>Gestion des Étudiants</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f4f8;
+            font-family: Arial, sans-serif;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .search-bar {
+            border-color: #4CAF50;
+        }
+        .student-item {
+            border-left: 4px solid #2196F3;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .student-item:hover {
+            background-color: #f1f8fe;
+        }
+        .button-blue {
+            background-color: #2196F3;
+            color: white;
+        }
+        .button-blue:hover {
+            background-color: #1976D2;
+        }
+        .button-green {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .button-green:hover {
+            background-color: #388E3C;
+        }
+        .pagination a {
+            margin: 0 5px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+        }
+        .pagination a.current-page {
+            background-color: #2196F3;
+        }
+        .pagination a:hover:not(.current-page) {
+            background-color: #ddd;
+            color: #333;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
-    <div class="container mx-auto mt-10">
-        <h1 class="text-4xl font-bold text-center mb-8">Liste des étudiants</h1>
+<body>
+    <div class="header">
+        Application de Gestion des Étudiants
+    </div>
 
+    <div class="container mx-auto mt-6">
         <!-- Champ de recherche -->
         <div class="mb-6">
             <input type="text" id="search-bar" onkeyup="searchStudents()" placeholder="Rechercher un étudiant par nom, âge ou identifiant" 
-                   class="w-full border border-gray-300 p-2 rounded" />
+                   class="w-full border border-gray-300 p-3 rounded search-bar" />
         </div>
 
         <!-- Affichage des étudiants avec boutons Détails et Supprimer -->
-        <ul id="student-list" class="list-disc">
+        <ul id="student-list" class="list-none">
             {% for etudiant in etudiants %}
-            <li class="mb-4 student-item" data-name="{{ etudiant.nom }}" data-age="{{ etudiant.age }}" data-id="{{ etudiant.identifiant }}">
-                <div class="flex justify-between items-center bg-white p-4 rounded shadow">
-                    <span>{{ etudiant.nom }} ({{ etudiant.age }} ans) - ID : {{ etudiant.identifiant }}</span>
+            <li class="student-item" data-name="{{ etudiant.nom }}" data-age="{{ etudiant.age }}" data-id="{{ etudiant.identifiant }}">
+                <div class="flex justify-between items-center">
                     <div>
-                        <!-- Bouton pour afficher les détails de l'étudiant -->
-                        <a href="{{ url_for('afficher_etudiant', id=loop.index0) }}" class="text-blue-500 hover:underline">Détails</a> |
-                        <!-- Bouton pour supprimer l'étudiant avec confirmation -->
+                        <span class="font-semibold text-xl">{{ etudiant.nom }}</span>
+                        <p class="text-gray-600">Âge : {{ etudiant.age }} | ID : {{ etudiant.identifiant }}</p>
+                    </div>
+                    <div>
+                        <a href="{{ url_for('afficher_etudiant', id=loop.index0) }}" class="button-blue px-3 py-1 rounded hover:bg-blue-600">Détails</a>
                         <form action="{{ url_for('supprimer_etudiant', id=loop.index0) }}" method="get" style="display:inline;">
-                            <button type="submit" class="text-red-500 hover:underline" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?')">Supprimer</button>
+                            <button type="submit" class="button-green px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?')">Supprimer</button>
                         </form>
                     </div>
                 </div>
@@ -36,13 +96,13 @@
         </ul>
 
         <!-- Pagination -->
-        <div class="flex justify-center mt-8">
+        <div class="flex justify-center mt-8 pagination">
             {% if page > 1 %}
             <a href="{{ url_for('afficher_etudiants', page=page-1) }}" class="bg-blue-500 text-white px-4 py-2 rounded mr-2">Précédent</a>
             {% endif %}
 
             {% for p in range(1, total_pages + 1) %}
-            <a href="{{ url_for('afficher_etudiants', page=p) }}" class="px-4 py-2 rounded mr-2 {{ 'bg-blue-500 text-white' if p == page else 'bg-gray-200 text-gray-700' }}">{{ p }}</a>
+            <a href="{{ url_for('afficher_etudiants', page=p) }}" class="px-4 py-2 rounded {{ 'bg-blue-500 text-white' if p == page else 'bg-gray-300 text-gray-700' }}">{{ p }}</a>
             {% endfor %}
 
             {% if page < total_pages %}
@@ -52,7 +112,7 @@
 
         <!-- Bouton pour ajouter un étudiant -->
         <div class="text-center mt-8">
-            <a href="{{ url_for('ajouter_etudiant') }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Ajouter un étudiant</a>
+            <a href="{{ url_for('ajouter_etudiant') }}" class="button-green text-white px-4 py-2 rounded hover:bg-green-600">Ajouter un étudiant</a>
         </div>
     </div>
 
@@ -67,9 +127,8 @@
                 const age = item.getAttribute("data-age");
                 const id = item.getAttribute("data-id").toLowerCase();
 
-                // Affiche ou masque l'élément en fonction de la recherche
                 if (name.includes(searchInput) || age.includes(searchInput) || id.includes(searchInput)) {
-                    item.style.display = "list-item";
+                    item.style.display = "block";
                 } else {
                     item.style.display = "none";
                 }
