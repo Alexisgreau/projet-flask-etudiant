@@ -1,61 +1,66 @@
 
-# Projet Flask - Gestion d'Étudiants
+# Application de Gestion des Étudiants
 
-Ce projet est une application web simple, développée avec Flask, permettant de gérer une liste d'étudiants. Il permet d'ajouter des étudiants, de consulter leurs détails, de modifier leurs informations, d'ajouter des notes et de calculer la moyenne des notes.
+## Description de l'application
 
-## Fonctionnalités
+Cette application de gestion des étudiants, développée en Python avec le framework Flask, permet de gérer facilement les informations des étudiants. Elle propose des fonctionnalités permettant d'ajouter, de modifier, de supprimer et de consulter les informations de chaque étudiant. De plus, il est possible d'ajouter des notes aux étudiants et de calculer leur moyenne. Une fonctionnalité de recherche en temps réel est également incluse, facilitant la recherche par nom, âge ou identifiant.
 
-- Ajouter un étudiant (nom, âge, numéro d'identification)
-- Consulter les détails d'un étudiant (nom, âge, notes)
-- Ajouter des notes à un étudiant
-- Calculer la moyenne des notes
-- Modifier les informations d'un étudiant
-- Supprimer un étudiant ou une note
+## Fonctionnalités principales
 
-## Prérequis
+- **Ajouter un étudiant** : Permet d'ajouter un étudiant en spécifiant son nom, son âge et un identifiant unique.
+- **Afficher la liste des étudiants** : Affiche une liste paginée des étudiants, avec 10 étudiants par page.
+- **Rechercher un étudiant** : Barre de recherche en temps réel pour rechercher par nom, âge ou identifiant.
+- **Détails d'un étudiant** : Affiche les informations détaillées d'un étudiant, y compris les notes.
+- **Ajouter une note** : Permet d'ajouter une note à un étudiant spécifique.
+- **Calculer la moyenne** : Affiche la moyenne des notes pour chaque étudiant.
+- **Modifier un étudiant** : Permet de modifier les informations d'un étudiant (nom et âge).
+- **Supprimer un étudiant** : Supprime un étudiant après confirmation.
+- **Supprimer une note** : Supprime une note spécifique d'un étudiant.
 
-Avant de commencer, assurez-vous d'avoir installé les éléments suivants :
+## Instructions pour l'installation et l'exécution
 
-- Python 3.x
-- Flask
-
-## Installation
-
-1. Clonez le dépôt :
-
-   git clone https://github.com/Alexisgreau/projet-flask-etudiant.git
-
-
-2. Accédez au dossier du projet :
-
+1. **Cloner le dépôt**
+   ```bash
+   git clone https://github.com/votre_nom_utilisateur/projet-flask-etudiant.git
    cd projet-flask-etudiant
+   ```
 
+2. **Installer les dépendances**
+   - Assurez-vous d'avoir Python 3 et `pip` installés.
+   - Installez les packages requis avec :
+     ```bash
+     pip install -r requirements.txt
+     ```
 
-3. Installez les dépendances :
+3. **Lancer l'application**
+   - Exécutez le serveur Flask avec :
+     ```bash
+     python app.py
+     ```
+   - L'application sera disponible à l'adresse `http://127.0.0.1:5000`.
 
-   pip install flask
+## Guide d'utilisation de l'application
 
-## Lancement de l'application
+1. **Ajouter un étudiant** :
+   - Cliquez sur "Ajouter un étudiant" en bas de la page principale.
+   - Saisissez le nom, l'âge et un identifiant unique pour l'étudiant.
+   - Si l'identifiant est déjà utilisé, un message d'erreur s'affichera.
 
-1. Lancez l'application Flask avec la commande suivante :
+2. **Afficher les détails d'un étudiant** :
+   - Dans la liste des étudiants, cliquez sur "Détails" à côté de l'étudiant que vous souhaitez consulter.
+   - Les informations complètes, y compris les notes, seront affichées.
 
-   python app.py
+3. **Ajouter une note** :
+   - Dans la page de détails d'un étudiant, saisissez une note et cliquez sur "Ajouter une note".
+   - La note sera ajoutée et la moyenne recalculée.
 
+4. **Modifier un étudiant** :
+   - Dans la liste des étudiants, cliquez sur "Modifier" à côté de l'étudiant que vous souhaitez mettre à jour.
+   - Saisissez les nouvelles informations (nom et/ou âge) et sauvegardez.
 
-2. Ouvrez votre navigateur et accédez à l'adresse suivante :
+5. **Supprimer un étudiant** :
+   - Dans la liste des étudiants, cliquez sur "Supprimer" à côté de l'étudiant.
+   - Une boîte de dialogue de confirmation s'affichera pour valider la suppression.
 
-   http://127.0.0.1:5000/
-
-
-## Structure du projet
-
-- **app.py** : Contient la logique principale de l'application Flask.
-- **templates/** : Contient les fichiers HTML pour l'interface utilisateur.
-  - index.html : Page d'accueil avec la liste des étudiants.
-  - ajouter_etudiant.html : Formulaire pour ajouter un étudiant.
-  - details_etudiant.html : Détails d'un étudiant et possibilité d'ajouter des notes.
-  - modifier_etudiant.html : Formulaire pour modifier les informations d'un étudiant.
-
-## Contribuer
-
-Les contributions sont les bienvenues ! Pour proposer des modifications, veuillez ouvrir une **pull request**.
+6. **Recherche en temps réel** :
+   - Utilisez la barre de recherche au-dessus de la liste des étudiants pour filtrer les résultats en fonction du nom, de l'âge ou de l'identifiant.
