@@ -34,9 +34,14 @@ Cette application de gestion des étudiants, développée en Python avec le fram
 
 3. **Lancer l'application**
    - Exécutez le serveur Flask avec :
-     ```bash
-     python app.py
-     ```
+      Sur Windows :
+         ```bash
+         python app.py
+         ```
+      Sur Mac/Linux :
+         ```bash
+         python app.py
+         ```
    - L'application sera disponible à l'adresse `http://127.0.0.1:5000`.
 
 ## Guide d'utilisation de l'application
