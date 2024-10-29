@@ -86,7 +86,7 @@
                     </div>
                     <div>
                         <a href="{{ url_for('afficher_etudiant', id=loop.index0) }}" class="button-blue px-3 py-1 rounded hover:bg-blue-600">Détails</a>
-                        <form action="{{ url_for('supprimer_etudiant', id=loop.index0) }}" method="get" style="display:inline;">
+                        <form action="{{ url_for('supprimer_etudiant', identifiant=etudiant['identifiant']) }}" method="get" style="display:inline;">
                             <button type="submit" class="button-green px-3 py-1 rounded hover:bg-red-600" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?')">Supprimer</button>
                         </form>
                     </div>

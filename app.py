@@ -32,7 +32,7 @@ def calculer_moyenne(notes):
 @app.route('/')
 def afficher_etudiants():
     page = request.args.get('page', 1, type=int)
-    per_page = 10
+    per_page = 5
     start = (page - 1) * per_page
     end = start + per_page
     etudiants_affiches = etudiants_df.iloc[start:end].to_dict(orient="records")
@@ -70,11 +70,13 @@ def afficher_etudiant(id):
     return render_template('details_etudiant.html', etudiant=etudiant, moyenne=moyenne, id=id)
 
 # Route pour supprimer un étudiant
-@app.route('/supprimer/<int:id>')
-def supprimer_etudiant(id):
+@app.route('/supprimer/<identifiant>')
+def supprimer_etudiant(identifiant):
     global etudiants_df
-    etudiants_df = etudiants_df.drop(id).reset_index(drop=True)
+    # Trouver l'index de l'étudiant avec l'identifiant fourni
+    etudiants_df = etudiants_df[etudiants_df["identifiant"] != identifiant].reset_index(drop=True)
     return redirect(url_for('afficher_etudiants'))
+
 
 # Route pour supprimer une note spécifique d'un étudiant
 @app.route('/supprimer_note/<int:id>/<int:index>')
