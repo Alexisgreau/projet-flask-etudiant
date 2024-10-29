@@ -40,7 +40,7 @@ Cette application de gestion des étudiants, développée en Python avec le fram
          ```
       - Sur Mac/Linux :
          ```bash
-         python app.py
+         python3 app.py
          ```
    - L'application sera disponible à l'adresse `http://127.0.0.1:5000`.
 
