@@ -21,7 +21,7 @@ Cette application de gestion des étudiants, développée en Python avec le fram
 
 1. **Cloner le dépôt**
    ```bash
-   git clone https://github.com/votre_nom_utilisateur/projet-flask-etudiant.git
+   git clone https://github.com/Alexisgreau/projet-flask-etudiant.git
    cd projet-flask-etudiant
    ```
 
@@ -29,7 +29,7 @@ Cette application de gestion des étudiants, développée en Python avec le fram
    - Assurez-vous d'avoir Python 3 et `pip` installés.
    - Installez les packages requis avec :
      ```bash
-     pip install -r requirements.txt
+     pip install flask
      ```
 
 3. **Lancer l'application**
